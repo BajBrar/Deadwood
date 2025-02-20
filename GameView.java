@@ -11,7 +11,15 @@ public class GameView {
     }
 
     //add all the display methods here
+    public void displayGameState() {
+    }
 
+    public void playerPrompt() {
+    }
+
+    public void displayWinner() {
+    }
+    
 
     //close the scanner 
     public void closeScanner() {
