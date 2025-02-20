@@ -4,6 +4,8 @@ import java.util.List;
 public class Room {
     private String name;
     private List<Room> adjacentRooms;
+    private Card card;
+    private List<Player> occupants;
 
     public Room(String name) {
         this.name = name;
@@ -12,6 +14,9 @@ public class Room {
 
     public String getName() {
         return name;
+    }
+
+    public void setCard(Card card) {
     }
 
     public void addAdjacentRoom(Room room) {
