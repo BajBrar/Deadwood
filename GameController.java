@@ -22,10 +22,33 @@ public class GameController {
     }
 
     public void movePlayer(String newPosition) {
-       
+
+        Player player = getCurrentPlayer();
+
+        //Make sure the player isn't acting or else they cant move
+       if (player.getStatus().equals("acting")) {
+           throw new IllegalStateException("Cannot move while acting!");
+       }
+       //Make sure that the move is valid so check the neighboring positions
+       //this needs to be changed isAdjacent isn't done in board yet
+    //    if (!board.isAdjacent(player.getPosition(), newPosition)) {
+    //     throw new IllegalStateException("Invalid move! Must move to an adjacent location.");
+    //    }
+        //Move player and update the position
+        player.move(newPosition);
+
     }
 
     public void playerRehearse() {
+        Player player = getCurrentPlayer();
+
+        //Ensure the player is not already acting because they cant act and rehearse at the same time
+        if (player.getStatus().equals("acting")){
+            throw new IllegalStateException("Can only rehearse while acting!");
+        }
+        player.setCurAction("rehearsing");
+        player.rehearse();
+
        
     }
 

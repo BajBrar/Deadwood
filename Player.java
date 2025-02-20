@@ -36,11 +36,10 @@ public class Player{
 
 //Same with rehearse
 public void rehearse() {
-  if (curAction.equals("acting")) {
+  if (curAction.equals("rehearsing")) {
       practiceChips++;
-  } else {
-      throw new IllegalStateException("Can only rehearse while acting!");
-  }
+      curAction = "rehearsing";}
+ 
 }
 
 //Base act logic but this needs some tweak to account for the different spaces (whether your acting on starring role or extra)
@@ -66,6 +65,9 @@ public void upgrade(int newRank, int costDollars, int costCredits) {
 public void endTurn() {
   curAction = "waiting";
   practiceChips = 0;
+}
+public void setCurAction(String action) {
+  this.curAction = action;
 }
 
 // Getters for Controller to use, if we make the vars private then well need these
