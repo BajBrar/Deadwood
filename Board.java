@@ -1,26 +1,30 @@
-import java.util.List;
+import java.util.*;
 
 public class Board {
     //I have a list but we don't have to store it as a list if we don't want to
-    private List<Room> rooms;
-    
-    //If we use location manager for anything other then initializing the board we can just use the location manager class
-    private LocationManager locationManager;
+    private ArrayList<Room> rooms;
+    private ArrayList<Card> cards;
 
-    public Board(LocationManager locationManager) {
-        
+    public Board(ArrayList<Room> rooms, ArrayList<Card> cards) {
+        this.rooms = rooms;
+        this.cards = cards;
+        for(Room room: rooms){
+            if (!room.getName().equals("office") && !room.getName().equals("trailer") && !cards.isEmpty()) {
+                room.setCard(cards.remove(0));
+            }
+        };
     }
 
     // Set the initial state of the board
     public void setBoard() {
-        
+        for(Room room: rooms){
+            if (!room.getName().equals("office") && !room.getName().equals("trailer") && !cards.isEmpty()) {
+                room.setCard(cards.remove(0));
+            }
+        };
     }
 
-    // Reset the board to its initial state
-    public void resetBoard() {
-        
-    }
-
+    
     // Update the board based on the game state
     public void updateBoard() {
         

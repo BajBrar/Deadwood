@@ -1,15 +1,15 @@
-import org.w3c.dom.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.*;
 
 class Set {
     String name;
     List<String> neighbors = new ArrayList<>();
     List<Take> takes = new ArrayList<>();
-    List<Part> parts = new ArrayList<>();
+    List<Role> parts = new ArrayList<>();
 }
 
 class Take {
@@ -23,9 +23,10 @@ class Part {
 }
 
 public class BoardParser {
-    public static void main(String[] args) {
+    public ArrayList<Room> parseBoard(String fileName) {
+        ArrayList<Room> rooms = new ArrayList<>();
         try {
-            File inputFile = new File("board.xml");
+            File inputFile = new File(fileName);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(inputFile);
@@ -64,19 +65,17 @@ public class BoardParser {
                         part.name = partElement.getAttribute("name");
                         part.level = Integer.parseInt(partElement.getAttribute("level"));
                         part.line = partElement.getElementsByTagName("line").item(0).getTextContent();
-                        set.parts.add(part);
+                        set.parts.add(new Role(part.name, part.level, part.line));
                     }
                     
-                    // Print parsed information
-                    System.out.println("Set: " + set.name);
-                    System.out.println("  Neighbors: " + set.neighbors);
-                    System.out.println("  Takes: " + set.takes.size());
-                    System.out.println("  Parts: " + set.parts.size());
+                    
+                    rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size()));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return rooms;
     }
 }
 

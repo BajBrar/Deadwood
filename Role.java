@@ -1,14 +1,16 @@
-import java.util.*;
 
 public class Role {
     private String name;
     private int rankRequirement;
     private boolean taken;
-
-    public Role(String name, int rankRequirement) {
+    private Player player;
+    private String line;
+    
+    public Role(String name, int rankRequirement, String line) {
         this.name = name;
         this.rankRequirement = rankRequirement;
         this.taken = false;
+        this.line = line;
     }
 
     public String getName() {

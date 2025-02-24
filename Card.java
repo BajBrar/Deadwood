@@ -5,52 +5,50 @@ public class Card {
     private int budget;
     private List<Role> roles; // Use a list to store multiple roles for now?
     private boolean shown;
-    private int shotCount;
+    private int sceneNum;
+    private String sceneDesc;
+    private String img;
     
     // Constructor
-    public Card(String name, int budget, List<Role> roles, int shotCount) {
+    public Card(String name, String img, int budget, int sceneNum, String sceneDesc, List<Role> roles) {
         this.name = name;
+        this.img = img;
         this.budget = budget;
+        this.sceneNum = sceneNum;
+        this.sceneDesc = sceneDesc;
         this.roles = roles;
+
         this.shown = false; // Initially the card is  face-down
-        this.shotCount = shotCount;
+  
     }
 
      // Methods
-     public void updateShot() {
-        if (shotCount > 0) {
-            shotCount--;
-        }
-    }
+     
 
     public void showCard() {
         this.shown = true;
     }
 
-    public boolean isCompleted() {
-        return shotCount == 0;
-    }
+    
 
     // Getters
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int getBudget() {
-        return budget;
+        return this.budget;
     }
 
     public List<Role> getRoles() {
-        return roles;
+        return this.roles;
     }
 
     public boolean isShown() {
         return shown;
     }
 
-    public int getShotCount() {
-        return shotCount;
-    }
+   
 
 }
 

@@ -1,4 +1,10 @@
 public class LocationManager{
+    private Board board;
+
+    public LocationManager(Board board){
+        this.board = board;
+    }
+
     public boolean validMove(String destination, Board board, Player player) {
         return true;
     }
@@ -9,8 +15,8 @@ public class LocationManager{
     public void getAdjRooms(Board board) {
     }
 
-    public Space getSpace(String curPos){
-        return new Space();
+    public Role getSpace(String curPos){
+        return new Role("", 0, "");
     }
 
     public void newDay(){

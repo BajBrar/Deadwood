@@ -14,11 +14,11 @@ public class Player{
 
 
 //Set up the players based on the total number of players playing the game.
-  public Player(int playerNum, int startRank, String startPos) {
+  public Player(int playerNum, int startRank, String startPos, int startCredit) {
     this.playerNum = playerNum;
     this.rank = startRank;
     this.dollars = 0;
-    this.credits = 0;
+    this.credits = startCredit;
     this.practiceChips = 0;
     this.curAction = "waiting";
     this.startPos = startPos;
