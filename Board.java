@@ -24,6 +24,16 @@ public class Board {
         };
     }
 
+    // Get a room by name
+    public Room getRoomByName(String roomName) {
+        for (Room room : rooms) {  
+            if (room.getName().equals(roomName)) {
+                return room;
+            }
+        }
+        return null; 
+    }
+
     
     // Update the board based on the game state
     public void updateBoard() {

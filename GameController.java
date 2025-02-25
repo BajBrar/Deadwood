@@ -16,56 +16,58 @@ public class GameController {
         this.players = players;
         this.board = board;
         this.dice = dice;
-        //need this var to keep track of what players turn it is
-        this.currentPlayerIndex = 0; 
+        // need this var to keep track of what players turn it is
+        this.currentPlayerIndex = 0;
     }
-    //we might need more methods to handle the game logic
+    // we might need more methods to handle the game logic
 
     public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
 
     public void movePlayer(String newPosition) {
-
         Player player = getCurrentPlayer();
-
-        //Make sure the player isn't acting or else they cant move
-       if (player.getStatus().equals("acting")) {
-           throw new IllegalStateException("Cannot move while acting!");
-       }
-       //Make sure that the move is valid so check the neighboring positions
-       //this needs to be changed isAdjacent isn't done in board yet
-    //    if (!board.isAdjacent(player.getPosition(), newPosition)) {
-    //     throw new IllegalStateException("Invalid move! Must move to an adjacent location.");
-    //    }
-        //Move player and update the position
+        // Make sure the player isn't acting or else they can't move
+        if (player.getStatus().equals("acting")) {
+            throw new IllegalStateException("Cannot move while acting!");
+        }
+        String currentPosition = player.getPosition();
+        // Check if the new position is a valid adjacent room
+        Room currentRoom = board.getRoomByName(currentPosition); 
+        if (currentRoom == null) {
+            throw new IllegalStateException("Invalid current position.");
+        }
+        List<String> adjacentRooms = currentRoom.getAdjacent();
+        if (!adjacentRooms.contains(newPosition)) {
+            throw new IllegalStateException("Invalid move! Must move to an adjacent location.");
+        }
+        //then move the player
         player.move(newPosition);
-
     }
 
     public void playerRehearse() {
         Player player = getCurrentPlayer();
 
-        //Ensure the player is not already acting because they cant act and rehearse at the same time
-        if (player.getStatus().equals("acting")){
+        // Ensure the player is not already acting because they cant act and rehearse at
+        // the same time
+        if (player.getStatus().equals("acting")) {
             throw new IllegalStateException("Can only rehearse while acting!");
         }
         player.setCurAction("rehearsing");
         player.rehearse();
 
-       
     }
 
     public void playerAct() {
-       
+
     }
 
     public void upgradePlayer(int newRank, int costDollars, int costCredits) {
-       
+
     }
 
     public void endTurn() {
-        //increment player index/set to 0
+        // increment player index/set to 0
     }
 
     public void StartGame(int playerCount, String cardFile, String boardFile) {
@@ -102,17 +104,17 @@ public class GameController {
             default:
                 throw new AssertionError();
         }
-        for(int i = 0; i < playerCount; i++) {
+        for (int i = 0; i < playerCount; i++) {
             this.players.add(new Player(i, startRank, "trailer", startCredit));
         }
-        //call card/board parser into list
+        // call card/board parser into list
         List<Card> cards = CardParser.parseCards(cardFile);
         System.out.println("Card size: " + cards.size());
         BoardParser bP = new BoardParser();
         List<Room> rooms = bP.parseBoard(boardFile);
         ArrayList<String> tadjRooms = new ArrayList<>();
         ArrayList<String> oadjRooms = new ArrayList<>();
-        for (Room r: rooms) {
+        for (Room r : rooms) {
             if (r.getAdjacent().contains("trailer")) {
                 tadjRooms.add(r.getName());
             }
@@ -128,17 +130,17 @@ public class GameController {
             System.out.println("Room: " + r.getName() + ", AdjRooms: " + r.getAdjacent());
         }
         for (Player p : players) {
-            System.out.println("Player " + p.getPlayerNumber() + ", Rank " + p.getRank() + ", Credits " + p.getCredits());
+            System.out
+                    .println("Player " + p.getPlayerNumber() + ", Rank " + p.getRank() + ", Credits " + p.getCredits());
         }
-        //call board constructor
-        //call gameLoop
+        // call board constructor
+        // call gameLoop
     }
 
     public void gameLoop() {
-        //while(gameOver == false) {
-            
-       // }
+        // while(gameOver == false) {
+
+        // }
     }
 
-    
 }
