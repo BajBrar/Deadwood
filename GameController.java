@@ -33,7 +33,7 @@ public class GameController {
         }
         String currentPosition = player.getPosition();
         // Check if the new position is a valid adjacent room
-        Room currentRoom = board.getRoomByName(currentPosition); 
+        Room currentRoom = board.getRoomByName(currentPosition);
         if (currentRoom == null) {
             throw new IllegalStateException("Invalid current position.");
         }
@@ -41,7 +41,7 @@ public class GameController {
         if (!adjacentRooms.contains(newPosition)) {
             throw new IllegalStateException("Invalid move! Must move to an adjacent location.");
         }
-        //then move the player
+        // then move the player
         player.move(newPosition);
     }
 
@@ -59,7 +59,23 @@ public class GameController {
     }
 
     public void playerAct() {
+        Player player = getCurrentPlayer();
 
+        if (!player.getStatus().equals("acting")) {
+            throw new IllegalStateException("Player must be acting to perform an action!");
+        }
+
+        Role playerRole = player.getRole(); // Get the player's role
+
+        if (playerRole == null) {
+            throw new IllegalStateException("Player must have a role to act!");
+        }
+
+        int rollResult = dice.roll(); // Simulate dice roll
+        boolean isStarring = playerRole.isStarring(); // Check if starring role
+        boolean success = player.act(rollResult, playerRole.getSceneBudget(), isStarring);
+
+        System.out.println("Player " + player.getPlayerNumber() + (success ? " succeeded!" : " failed!"));
     }
 
     public void upgradePlayer(int newRank, int costDollars, int costCredits) {
@@ -67,7 +83,28 @@ public class GameController {
     }
 
     public void endTurn() {
-        // increment player index/set to 0
+        // Move to the next player
+        currentPlayerIndex++;
+
+        // If we've reached the end of the player list, reset the index
+        if (currentPlayerIndex >= players.size()) {
+            currentPlayerIndex = 0;
+        }
+
+        // update day or game status if necessary
+        if (currentPlayerIndex == 0) {
+            dayNum++;
+        }
+
+        // Check if the game has reached the maximum days
+        if (dayNum > maxDay) {
+            gameOver = true;
+            return;
+        }
+
+        // Set the current player to the next player
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.endTurn();
     }
 
     public void StartGame(int playerCount, String cardFile, String boardFile) {

@@ -35,6 +35,9 @@ public class Card {
     public String getName() {
         return this.name;
     }
+    public int getSceneBudget() { 
+        return budget;
+    }
 
     public int getBudget() {
         return this.budget;

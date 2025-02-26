@@ -8,10 +8,12 @@ public class Room {
     private List<Role> extras;
     private int maxTakes;
     private int accTakes;
+   
 
     public Room(String name, List<String> adjacentRooms, List<Role> extras, int maxTakes) {
         this.name = name;
         this.adjacentRooms = adjacentRooms;
+       
     }
 
     public String getName() {
@@ -34,4 +36,5 @@ public class Room {
     public void resetRoom() {
         this.accTakes = 0;
     }
+    
 }

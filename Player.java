@@ -12,6 +12,8 @@ public class Player{
   public String startPos;
   public String curPos;
 
+  private Role role;
+
 
 //Set up the players based on the total number of players playing the game.
   public Player(int playerNum, int startRank, String startPos, int startCredit) {
@@ -42,20 +44,30 @@ public void rehearse() {
  
 }
 
-//Base act logic but this needs some tweak to account for the different spaces (whether your acting on starring role or extra)
-public boolean act(int rollResult, int sceneBudget) {
+//fixed act to take care of the starring role vs extra role logic
+public boolean act(int rollResult, int sceneBudget, boolean isStarringRole) {
   if (!curAction.equals("acting")) {
       throw new IllegalStateException("Can only act while on a role!");
   }
+
   int totalRoll = rollResult + practiceChips;
   boolean success = totalRoll >= sceneBudget;
+
   if (success) {
-      credits += 2;
+      if (isStarringRole) {
+          credits += 2; // Starring roles only earn credits
+      } else {
+          dollars += 2; // Extra roles earn dollars
+      }
+      practiceChips = 0; // Reset practice chips after success
   } else {
-      dollars += 1;  
+      if (!isStarringRole) {
+          dollars += 1; // Extras still get paid even if they fail
+      }
   }
   return success;
 }
+
 
 //upgrade should go here but I don't know if were adding the upgrade logic in this class or another?
 public void upgrade(int newRank, int costDollars, int costCredits) {
@@ -66,6 +78,22 @@ public void endTurn() {
   curAction = "waiting";
   practiceChips = 0;
 }
+public void takeRole(Role newRole) {
+  if (this.role != null) {
+      throw new IllegalStateException("Player is already in a role!");
+  }
+  this.role = newRole;
+  this.curAction = "acting"; // Update status
+}
+
+public void leaveRole() {
+  if (this.role == null) {
+      throw new IllegalStateException("Player is not in a role!");
+  }
+  this.role = null; // Remove role from the player
+  this.curAction = "idle"; // Reset status?
+}
+
 public void setCurAction(String action) {
   this.curAction = action;
 }
@@ -78,5 +106,5 @@ public int getCredits() { return credits; }
 public int getPracticeChips() { return practiceChips; }
 public String getStatus() { return curAction; }
 public String getPosition() { return curPos; }
-  
+public Role getRole() {return role;}
 }
