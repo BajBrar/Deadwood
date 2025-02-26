@@ -98,6 +98,11 @@ public void setCurAction(String action) {
   this.curAction = action;
 }
 
+public void setFunds(int dol, int cred) {
+  this.dollars = dol;
+  this.credits = cred;
+}
+
 // Getters for Controller to use, if we make the vars private then well need these
 public int getPlayerNumber() { return playerNum; }
 public int getRank() { return rank; }

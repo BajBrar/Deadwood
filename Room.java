@@ -33,8 +33,40 @@ public class Room {
         return this.adjacentRooms;
     }
 
-    public void resetRoom() {
-        this.accTakes = 0;
+    public void addOccupant(Player player) {
+        occupants.add(player);
+    }
+
+    public void remOccupant(Player player) {
+        occupants.remove(player);
     }
     
+    public void sceneFinished() {
+        for(Role r: card.getRoles()) {
+            if (r.isTaken()) {
+                addOccupant(r.getPlayer());
+                r.leaveRole();
+            }
+        }
+        for (Role r : this.extras) {
+            if (r.isTaken()) {
+                addOccupant(r.getPlayer());
+                r.leaveRole();
+            }
+        }
+        card.hideCard();
+    }
+
+    public void remTake() {
+        if (this.accTakes > 0) {
+            this.accTakes = this.accTakes - 1;
+        } else sceneFinished();
+    }
+
+    public int remainingTake() {
+        return this.maxTakes - this.accTakes;
+    }
+    public List<Role> getExtras()  {
+        return this.extras;
+    }
 }

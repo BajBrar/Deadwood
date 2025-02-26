@@ -146,7 +146,6 @@ public class GameController {
         }
         // call card/board parser into list
         List<Card> cards = CardParser.parseCards(cardFile);
-        System.out.println("Card size: " + cards.size());
         BoardParser bP = new BoardParser();
         List<Room> rooms = bP.parseBoard(boardFile);
         ArrayList<String> tadjRooms = new ArrayList<>();
@@ -159,16 +158,13 @@ public class GameController {
                 oadjRooms.add(r.getName());
             }
         }
+        // NEED TO EDIT PARSER TO GET ALL INFORMATION!!!!!
         rooms.add(new Room("trailer", tadjRooms, null, -1));
         rooms.add(new Room("office", oadjRooms, null, -1));
 
-        System.out.println("Rooms size: " + rooms.size());
-        for (Room r : rooms) {
-            System.out.println("Room: " + r.getName() + ", AdjRooms: " + r.getAdjacent());
-        }
-        for (Player p : players) {
-            System.out
-                    .println("Player " + p.getPlayerNumber() + ", Rank " + p.getRank() + ", Credits " + p.getCredits());
+        GameView v = new GameView();
+        for (Card c : cards) {
+            v.displayNewCard(c);
         }
         // call board constructor
         // call gameLoop

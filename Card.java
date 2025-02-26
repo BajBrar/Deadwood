@@ -29,9 +29,17 @@ public class Card {
         this.shown = true;
     }
 
+    public void hideCard() {
+        this.shown = false;
+    }
     
 
     // Getters
+
+    public String getDesc() {
+        return this.sceneDesc;
+    }
+
     public String getName() {
         return this.name;
     }
