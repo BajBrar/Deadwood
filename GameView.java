@@ -7,9 +7,9 @@ import java.util.Set;
 class GameView implements View{
     
     @Override
-    public void displayMoveOptions(String name, Set<String> opts) {
+    public void displayMoveOptions(int num, Set<String> opts) {
         try {
-            System.out.println(name + "'s turn!");
+            System.out.println("Player " + num + "'s turn!");
             System.out.println("Choose an option: " + String.join(", ", opts));
         } catch (Exception e) {
             System.out.println(e);

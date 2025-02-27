@@ -1,7 +1,10 @@
 //This class is the controller for the game. It will handle the game logic for MVC pattern.
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 public class GameController {
     private ArrayList<Player> players = new ArrayList<>();
@@ -75,7 +78,6 @@ public class GameController {
         boolean isStarring = playerRole.isStarring(); // Check if starring role
         boolean success = player.act(rollResult, playerRole.getSceneBudget(), isStarring);
 
-        System.out.println("Player " + player.getPlayerNumber() + (success ? " succeeded!" : " failed!"));
     }
 
     public void upgradePlayer(int newRank, int costDollars, int costCredits) {
@@ -162,18 +164,58 @@ public class GameController {
         rooms.add(new Room("trailer", tadjRooms, null, -1));
         rooms.add(new Room("office", oadjRooms, null, -1));
 
-        GameView v = new GameView();
-        for (Card c : cards) {
-            v.displayNewCard(c);
-        }
-        // call board constructor
-        // call gameLoop
+        
+        
+        gameLoop();
     }
 
     public void gameLoop() {
-        // while(gameOver == false) {
+        Random r = new Random();
+        int start = r.nextInt(this.players.size());
+        GameView v = new GameView();
+        ConsoleInput i = new ConsoleInput();
+        Set<String> opts = new HashSet<>();
+        while(gameOver == false) {
+            if (this.players.get(start).getRole() == null) {
+                opts.add("move");
+                if (this.players.get(start).getPosition().equals("office")) {
+                    opts.add("upgrade");
+                }
+            } else {
+                opts.add("act");
+                if (this.players.get(start).getPracticeChips() < this.players.get(start).getRole().getSceneBudget()) {
+                    opts.add("rehearse");
+                }
+            }
+            v.displayMoveOptions(this.players.get(start).getPlayerNumber(), opts);
+            String s = "";
+            while (!opts.contains(s)) { 
+                s = i.requestInput();
+                if (!opts.contains(s)) {
+                    v.displayInvalidInput();
+                }
+            }
+            switch (s) {
+                case "move":
+                    System.out.println("moved");
+                    break;
+                case "upgrade":
+                    System.out.println("upgraded");
+                    break;
+                case "act":
+                    System.out.println("acted");
+                    break;
+                case "rehearse":
+                    System.out.println("rehearsed");
+                    break;
+                default:
+                    throw new AssertionError();
+            }
 
-        // }
+            if (start == this.players.size() - 1) {
+                start = 0;
+            } else { start += 1; }
+        }
     }
 
 }

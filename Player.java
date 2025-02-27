@@ -24,6 +24,7 @@ public class Player{
     this.practiceChips = 0;
     this.curAction = "waiting";
     this.startPos = startPos;
+    this.curPos = startPos;
   }
 
   //we need the player to move so make a simple move function, the actual controller class will implement the logic
