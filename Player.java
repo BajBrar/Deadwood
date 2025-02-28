@@ -113,4 +113,7 @@ public int getPracticeChips() { return practiceChips; }
 public String getStatus() { return curAction; }
 public String getPosition() { return curPos; }
 public Role getRole() {return role;}
+public void setDollars(int dollars){this.dollars = dollars;}
+public void setRank(int rank){this.rank = rank;}
+public void setCredits(int credits){this.credits = credits;}
 }

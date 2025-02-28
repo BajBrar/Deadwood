@@ -81,6 +81,48 @@ public class GameController {
     }
 
     public void upgradePlayer(int newRank, int costDollars, int costCredits) {
+        Player player = getCurrentPlayer();
+
+        //Check if the player has enough resources (dollars and credits) I don't think a player should be able to downgrade their rank
+        if (newRank <= player.getRank()) {
+            throw new IllegalArgumentException("Player must upgrade to a higher rank.");
+        }
+
+        //Check the cost based on the rank upgrade
+        if (newRank == 2) {
+            if (costDollars > player.getDollars() && costCredits > player.getCredits()) {
+                throw new IllegalStateException("Not enough currency for upgrade.");
+            }
+        } else if (newRank == 3) {
+            if (costDollars > player.getDollars() && costCredits > player.getCredits()) {
+                throw new IllegalStateException("Not enough currency for upgrade.");
+            }
+        } else if (newRank == 4) {
+            if (costDollars > player.getDollars() && costCredits > player.getCredits()) {
+                throw new IllegalStateException("Not enough currency for upgrade.");
+            }
+        } else if (newRank == 5) {
+            if (costDollars > player.getDollars() && costCredits > player.getCredits()) {
+                throw new IllegalStateException("Not enough currency for upgrade.");
+            }
+            } else if (newRank == 6) {
+                if (costDollars > player.getDollars() && costCredits > player.getCredits()) {
+                    throw new IllegalStateException("Not enough currency for upgrade.");
+                }
+            } else {
+                throw new IllegalArgumentException("Invalid rank specified.");
+            }
+
+            //Deduct the currency required for the upgrade
+            if (costDollars > 0) {
+                player.setDollars(player.getDollars() - costDollars);
+            }
+            if (costCredits > 0) {
+                player.setCredits(player.getCredits() - costCredits);
+            }
+
+            //Upgrade the player's rank
+            player.setRank(newRank);
 
     }
 
