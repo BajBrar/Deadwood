@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Room {
@@ -8,12 +9,22 @@ public class Room {
     private List<Role> extras;
     private int maxTakes;
     private int accTakes;
+    private List<Upgrade> upgrades;
    
 
     public Room(String name, List<String> adjacentRooms, List<Role> extras, int maxTakes) {
         this.name = name;
         this.adjacentRooms = adjacentRooms;
+        this.upgrades = new ArrayList<>();
        
+    }
+
+    public void addUpgrade(Upgrade upgrade) {
+        upgrades.add(upgrade);
+    }
+
+    public List<Upgrade> getUpgrades() {
+        return upgrades;
     }
 
     public String getName() {

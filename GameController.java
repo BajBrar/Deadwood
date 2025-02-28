@@ -160,11 +160,10 @@ public class GameController {
                 oadjRooms.add(r.getName());
             }
         }
-        // NEED TO EDIT PARSER TO GET ALL INFORMATION!!!!!
-        rooms.add(new Room("trailer", tadjRooms, null, -1));
-        rooms.add(new Room("office", oadjRooms, null, -1));
+        // // NEED TO EDIT PARSER TO GET ALL INFORMATION!!!!!
+        // rooms.add(new Room("trailer", tadjRooms, null, -1));
+        // rooms.add(new Room("office", oadjRooms, null, -1));
 
-        
         
         gameLoop();
     }
