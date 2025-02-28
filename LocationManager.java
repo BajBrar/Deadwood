@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class LocationManager{
     private Board board;
 
@@ -5,28 +6,55 @@ public class LocationManager{
         this.board = board;
     }
 
-    public boolean validMove(String destination, Board board, Player player) {
-        return true;
+    public void move(String destination, Player player) {
+        if (board.getRoomByName(destination) != null) {
+            player.updatePos(destination);
+            getRoom(destination).addOccupant(player);
+            getRoom(player.getStartPosition()).remOccupant(player);
+        } else {
+            for (Room room: board.getRooms()) { 
+                if (!room.getName().equalsIgnoreCase("trailer") && !room.getName().equalsIgnoreCase("office")) {
+                    for (Role role : room.getExtras()) {
+                        if (destination.equals(role.getName())) {
+                            player.updatePos(destination);
+                            role.takeRole(player);
+                            getRoom(player.getStartPosition()).remOccupant(player);
+                        }
+                    }
+                    for (Role role : room.getCard().getRoles()) {
+                        if (destination.equals(role.getName())) {
+                            player.updatePos(destination);
+                            role.takeRole(player);
+                            getRoom(player.getStartPosition()).remOccupant(player);
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    public void move(String destination, Board board, Player player) {
+    public ArrayList<String> getAdjRooms(String roomName) {
+        if (board.getRoomByName(roomName) != null) {
+            return board.getRoomByName(roomName).getAdjacent();
+        } else return null;
     }
 
-    public void getAdjRooms(Board board) {
-    }
-
-    public Role getSpace(String curPos){
-        return new Role("", 0, "");
+    public Role getRole(Player player){
+        for (Room room: board.getRooms()) {
+            for (Role role : room.getAllRoles()) {
+                if (role.isTaken() && role.getPlayer().equals(player)) {
+                    return role;
+                }
+            }
+        }
+        return null;
     }
 
     public void newDay(){
-        //set all player location to trailer
+        board.setBoard();
     }
 
-    public boolean getRoom(Player player, Board board, String destination){
-        return true;
+    public Room getRoom(String roomName){
+        return board.getRoomByName(roomName);
     }
-
-    
 }
-//Having some trouble with this without first parsing the XML file

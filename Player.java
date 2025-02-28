@@ -1,18 +1,14 @@
 public class Player{
   //Also these should be private and have getters and setters cause I dint think we want to change these values
-  public int playerNum;
-  public int rank;
-  public int dollars;
-  public int credits;
-  public int practiceChips;
-  //public String status; changed to curAction
-  //Possibly be changed for a different class such as space.
-  //need a var to keep track of what action the player is doing\
-  public String curAction;
-  public String startPos;
-  public String curPos;
-
-  private Role role;
+  private int playerNum;
+  private int rank;
+  private int dollars;
+  private int credits;
+  private int practiceChips;
+  //curAction can be [idle, working, worked, moved]
+  private String curAction;
+  private String startPos;
+  private String curPos;
 
 
 //Set up the players based on the total number of players playing the game.
@@ -22,78 +18,18 @@ public class Player{
     this.dollars = 0;
     this.credits = startCredit;
     this.practiceChips = 0;
-    this.curAction = "waiting";
+    this.curAction = "idle";
     this.startPos = startPos;
     this.curPos = startPos;
   }
 
   //we need the player to move so make a simple move function, the actual controller class will implement the logic
-  public void move(String newPosition) {
-    if (!curAction.equals("acting")) {
+  public void updatePos(String newPosition) {
+        this.startPos = this.curPos;
         this.curPos = newPosition;
-        curAction = "waiting";
-    } else {
-        throw new IllegalStateException("Cannot move while acting!");
-    }
+        curAction = "moved";
 }
 
-//Same with rehearse
-public void rehearse() {
-  if (curAction.equals("rehearsing")) {
-      practiceChips++;
-      curAction = "rehearsing";}
- 
-}
-
-//fixed act to take care of the starring role vs extra role logic
-public boolean act(int rollResult, int sceneBudget, boolean isStarringRole) {
-  if (!curAction.equals("acting")) {
-      throw new IllegalStateException("Can only act while on a role!");
-  }
-
-  int totalRoll = rollResult + practiceChips;
-  boolean success = totalRoll >= sceneBudget;
-
-  if (success) {
-      if (isStarringRole) {
-          credits += 2; // Starring roles only earn credits
-      } else {
-          dollars += 2; // Extra roles earn dollars
-      }
-      practiceChips = 0; // Reset practice chips after success
-  } else {
-      if (!isStarringRole) {
-          dollars += 1; // Extras still get paid even if they fail
-      }
-  }
-  return success;
-}
-
-
-//upgrade should go here but I don't know if were adding the upgrade logic in this class or another?
-public void upgrade(int newRank, int costDollars, int costCredits) {
-  
-}
-
-public void endTurn() {
-  curAction = "waiting";
-  practiceChips = 0;
-}
-public void takeRole(Role newRole) {
-  if (this.role != null) {
-      throw new IllegalStateException("Player is already in a role!");
-  }
-  this.role = newRole;
-  this.curAction = "acting"; // Update status
-}
-
-public void leaveRole() {
-  if (this.role == null) {
-      throw new IllegalStateException("Player is not in a role!");
-  }
-  this.role = null; // Remove role from the player
-  this.curAction = "idle"; // Reset status?
-}
 
 public void setCurAction(String action) {
   this.curAction = action;
@@ -104,6 +40,12 @@ public void setFunds(int dol, int cred) {
   this.credits = cred;
 }
 
+public void freshDay() {
+  setCurAction("idle");
+  this.curPos = "Trailer";
+  this.startPos = "Trailer";
+}
+
 // Getters for Controller to use, if we make the vars private then well need these
 public int getPlayerNumber() { return playerNum; }
 public int getRank() { return rank; }
@@ -112,8 +54,9 @@ public int getCredits() { return credits; }
 public int getPracticeChips() { return practiceChips; }
 public String getStatus() { return curAction; }
 public String getPosition() { return curPos; }
-public Role getRole() {return role;}
+public String getStartPosition() { return startPos; }
 public void setDollars(int dollars){this.dollars = dollars;}
 public void setRank(int rank){this.rank = rank;}
 public void setCredits(int credits){this.credits = credits;}
+public void setPracticeChips(int num) {this.practiceChips = num;}
 }

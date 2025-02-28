@@ -1,15 +1,14 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.*;
 
 class Set {
     String name;
-    List<String> neighbors = new ArrayList<>();
-    List<Take> takes = new ArrayList<>();
-    List<Role> parts = new ArrayList<>();
+    ArrayList<String> neighbors = new ArrayList<>();
+    ArrayList<Take> takes = new ArrayList<>();
+    ArrayList<Role> parts = new ArrayList<>();
 }
 
 class Take {
@@ -23,7 +22,7 @@ class Part {
 }
 
 public class BoardParser {
-    public ArrayList<Room> parseBoard(String fileName) {
+    public static ArrayList<Room> parseBoard(String fileName) {
         ArrayList<Room> rooms = new ArrayList<>();
         try {
             File inputFile = new File(fileName);
@@ -66,7 +65,9 @@ public class BoardParser {
                         part.level = Integer.parseInt(partElement.getAttribute("level"));
                         part.line = partElement.getElementsByTagName("line").item(0).getTextContent();
                         set.parts.add(new Role(part.name, part.level, part.line));
+                        
                     }
+                    
 
                     rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size()));
                 }
@@ -78,12 +79,12 @@ public class BoardParser {
                 Node trailerNode = trailerList.item(i);
                 if (trailerNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element trailerElement = (Element) trailerNode;
-                    List<String> neighbors = new ArrayList<>();
+                    ArrayList<String> neighbors = new ArrayList<>();
                     NodeList neighborList = trailerElement.getElementsByTagName("neighbor");
                     for (int j = 0; j < neighborList.getLength(); j++) {
                         neighbors.add(((Element) neighborList.item(j)).getAttribute("name"));
                     }
-                    rooms.add(new Room("Trailer", neighbors, new ArrayList<>(), 0));
+                    rooms.add(new Room("Trailer", neighbors, null, 0));
                 }
             }
 
@@ -93,8 +94,8 @@ public class BoardParser {
                 Node officeNode = officeList.item(i);
                 if (officeNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element officeElement = (Element) officeNode;
-                    List<String> neighbors = new ArrayList<>();
-                    List<Upgrade> upgrades = new ArrayList<>();
+                    ArrayList<String> neighbors = new ArrayList<>();
+                    ArrayList<Upgrade> upgrades = new ArrayList<>();
 
                     NodeList neighborNodes = officeElement.getElementsByTagName("neighbor");
                     for (int j = 0; j < neighborNodes.getLength(); j++) {
@@ -112,7 +113,7 @@ public class BoardParser {
                         upgrades.add(new Upgrade(level, currency, amount));
                     }
 
-                    Room office = new Room("Office", neighbors, new ArrayList<>(), 0);
+                    Room office = new Room("Office", neighbors, null, 0);
                     for (Upgrade upgrade : upgrades) {
                         office.addUpgrade(upgrade);
                     }

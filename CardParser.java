@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
@@ -16,8 +15,8 @@ class Scene {
 }
 
 public class CardParser {
-    public static List<Card> parseCards(String filename) {
-        List<Card> cards = new ArrayList<>();
+    public static ArrayList<Card> parseCards(String filename) {
+        ArrayList<Card> cards = new ArrayList<>();
         try {
             File file = new File(filename);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -37,7 +36,7 @@ public class CardParser {
                 String sceneDesc = sceneElement.getTextContent().trim();
                 Scene scene = new Scene(sceneNumber, sceneDesc);
                 
-                List<Role> roles = new ArrayList<>();
+                ArrayList<Role> roles = new ArrayList<>();
                 NodeList partNodes = cardElement.getElementsByTagName("part");
                 for (int j = 0; j < partNodes.getLength(); j++) {
                     Element partElement = (Element) partNodes.item(j);
