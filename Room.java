@@ -63,17 +63,17 @@ public class Room {
         for(Role r: card.getRoles()) {
             if (r.isTaken()) {
                 addOccupant(r.getPlayer());
-                r.leaveRole();
                 r.getPlayer().setCurAction("idle");
                 r.getPlayer().setPracticeChips(0);
+                r.leaveRole();
             }
         }
         for (Role r : this.extras) {
             if (r.isTaken()) {
                 addOccupant(r.getPlayer());
-                r.leaveRole();
                 r.getPlayer().setCurAction("idle");
                 r.getPlayer().setPracticeChips(0);
+                r.leaveRole();
             }
         }
         card.hideCard();
