@@ -72,7 +72,6 @@ public class GameController {
         helpOpt.add("active?");
         helpOpt.add("info");
         helpOpt.add("end game");
-        helpOpt.add("help");
         gameLoop();
     }
     
