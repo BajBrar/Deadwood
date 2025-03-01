@@ -5,7 +5,7 @@ In order to run you must compile then run the Deadwood.java file in command line
 
 Once in the Deadwood directory in your terminal you must type:
 
-    javac Deadwood.java
+    javac *.java
 After everything gets compiled you must type:
     
     java Deadwood.java
