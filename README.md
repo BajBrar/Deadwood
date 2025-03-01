@@ -1,10 +1,14 @@
 # Assignment2
-This is our implementation of Deadwood.\\
-In order to run you must compile then run the Deadwood.java file in command line with no arguments.\\
-Once in the Deadwood directory in your terminal you must type:\\
-    "javac Deadwood.java"\\
-After everything gets compiled you must type:\\
-    "java Deadwood.java"\\
+This is our implementation of Deadwood.
+
+In order to run you must compile then run the Deadwood.java file in command line with no arguments.
+
+Once in the Deadwood directory in your terminal you must type:
+
+    "javac Deadwood.java"
+After everything gets compiled you must type:
+    
+    "java Deadwood.java"
 
 You will be prompted for a player count to play the game, from there it will pick a random player to start and you will be prompted to choose an option, these options are case-sensitive and must look exactly as printed to the screen.
 There are also additional commands you are able to run at any time after you pick the player count.
