@@ -107,6 +107,7 @@ public class GameController {
                     case "end game":
                     dayNum = maxDay;
                     endDay();
+                    System.exit(0);
                     break;
                 }
                 v.displayOptions(opt);  

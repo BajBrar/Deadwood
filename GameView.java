@@ -26,7 +26,7 @@ class GameView implements View{
                 System.out.print(i + ", ");
             }
         }
-        System.out.print("win with " + points + "points.");
+        System.out.print("win with " + points + " points.");
     };
     @Override
     public void displayInvalidInput() {
