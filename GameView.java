@@ -16,11 +16,15 @@ class GameView implements View{
         }
     };
     @Override
-    public void displayWinner(ArrayList<Player> players, int points) {
+    public void displayWinner(int[] winners) {
         System.out.println();
         System.out.print("Player(s) ");
-        for(Player p: players) {
-            System.out.print(p.getPlayerNumber() + ", ");
+        int points = 0;
+        for(int i = 0; i < winners.length; i++) {
+            if (winners[i] != 0) {
+                points = winners[i];
+                System.out.print(i + ", ");
+            }
         }
         System.out.print("win with " + points + "points.");
     };
@@ -65,11 +69,11 @@ class GameView implements View{
         }
     }
     @Override
-    public void displayRankUp(int player, int rank) {
+    public void displayRankUp(int player, int rank, int newRank) {
         if (rank == 0) {
-            System.out.println("Player " + player + "could not afford the rank.");
+            System.out.println("Player " + player + " could not afford the rank.");
         } else {
-            System.out.println("Player " + player + "is now rank " + rank + ".");
+            System.out.println("Player " + player + " was rank " + rank + " is now rank " + newRank + ".");
         }
     }
     @Override
@@ -83,5 +87,21 @@ class GameView implements View{
     @Override
     public void sceneWrapped(String sceneName) {
         System.out.println("" + sceneName + " has wrapped! Great job everyone!");
+    }
+    @Override
+    public void playerCount() {
+        System.out.println("How many players will be playing? [2-8] (inclusive)");
+    }
+    @Override
+    public void displayRehearse(int player, int chips) {
+        System.out.println("Player " + player + " has " + chips + " practice chips.");
+    }
+    @Override
+    public void displayActive(int player, String roomName, int credit, int dollar, String out) {
+        System.out.println("Player " + player + " has " + credit + " credit(s) and $" + dollar + ". They are in the " + out);
+    }
+    @Override 
+    public void displayPlayer(String out) {
+        System.out.println(out);
     }
 }

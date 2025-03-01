@@ -4,7 +4,7 @@ public class Board {
     //I have a list but we don't have to store it as a list if we don't want to
     private ArrayList<Room> rooms;
     private ArrayList<Card> cards;
-
+    
     public Board(ArrayList<Room> rooms, ArrayList<Card> cards, ArrayList<Player> players) {
         this.rooms = rooms;
         this.cards = cards;
@@ -18,7 +18,7 @@ public class Board {
             }
         }
     }
-
+    
     // Set the initial state of the board
     public void setBoard() {
         for(Room room: rooms){
@@ -28,7 +28,7 @@ public class Board {
             }
         }
     }
-
+    
     // Get a room by name
     public Room getRoomByName(String roomName) {
         for (Room room : rooms) {  
@@ -38,8 +38,24 @@ public class Board {
         }
         return null; 
     }
-
-
+    
+    public Room getRoomByPlayer(Player player) {
+        Room retRoom = null;
+        for (Room room : rooms) {  
+            if (room.getOccupants().contains(player)) {
+                retRoom = room;
+            } else if (!room.getName().equalsIgnoreCase("office") && !room.getName().equalsIgnoreCase("trailer")) {
+                for (Role role : room.getAllRoles()) {
+                    if (role.isTaken() && role.getPlayer() == player) {
+                        retRoom = room;
+                    }
+                }
+            }
+        }
+        return retRoom; 
+    }
+    
+    
     // Getters
     public ArrayList<Room> getRooms() {
         return this.rooms;

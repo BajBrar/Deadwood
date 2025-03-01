@@ -7,7 +7,7 @@ import org.w3c.dom.*;
 class Scene {
     int number;
     String description;
-
+    
     public Scene(int number, String description) {
         this.number = number;
         this.description = description;
@@ -23,7 +23,7 @@ public class CardParser {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(file);
             doc.getDocumentElement().normalize();
-
+            
             NodeList cardNodes = doc.getElementsByTagName("card");
             for (int i = 0; i < cardNodes.getLength(); i++) {
                 Element cardElement = (Element) cardNodes.item(i);

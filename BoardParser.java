@@ -30,23 +30,23 @@ public class BoardParser {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(inputFile);
             doc.getDocumentElement().normalize();
-
+            
             NodeList setList = doc.getElementsByTagName("set");
-
+            
             for (int i = 0; i < setList.getLength(); i++) {
                 Node setNode = setList.item(i);
                 if (setNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element setElement = (Element) setNode;
                     Set set = new Set();
                     set.name = setElement.getAttribute("name");
-
+                    
                     // Parse neighbors
                     NodeList neighbors = setElement.getElementsByTagName("neighbor");
                     for (int j = 0; j < neighbors.getLength(); j++) {
                         Element neighborElement = (Element) neighbors.item(j);
                         set.neighbors.add(neighborElement.getAttribute("name"));
                     }
-
+                    
                     // Parse takes
                     NodeList takes = setElement.getElementsByTagName("take");
                     for (int j = 0; j < takes.getLength(); j++) {
@@ -55,7 +55,7 @@ public class BoardParser {
                         take.number = Integer.parseInt(takeElement.getAttribute("number"));
                         set.takes.add(take);
                     }
-
+                    
                     // Parse parts
                     NodeList parts = setElement.getElementsByTagName("part");
                     for (int j = 0; j < parts.getLength(); j++) {
@@ -67,12 +67,11 @@ public class BoardParser {
                         set.parts.add(new Role(part.name, part.level, part.line));
                         
                     }
-                    
-
                     rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size()));
+                    
                 }
             }
-
+            
             // Parse trailer
             NodeList trailerList = doc.getElementsByTagName("trailer");
             for (int i = 0; i < trailerList.getLength(); i++) {
@@ -87,7 +86,7 @@ public class BoardParser {
                     rooms.add(new Room("Trailer", neighbors, null, 0));
                 }
             }
-
+            
             // Parse Office
             NodeList officeList = doc.getElementsByTagName("office");
             for (int i = 0; i < officeList.getLength(); i++) {
@@ -96,13 +95,13 @@ public class BoardParser {
                     Element officeElement = (Element) officeNode;
                     ArrayList<String> neighbors = new ArrayList<>();
                     ArrayList<Upgrade> upgrades = new ArrayList<>();
-
+                    
                     NodeList neighborNodes = officeElement.getElementsByTagName("neighbor");
                     for (int j = 0; j < neighborNodes.getLength(); j++) {
                         Element neighborElement = (Element) neighborNodes.item(j);
                         neighbors.add(neighborElement.getAttribute("name"));
                     }
-
+                    
                     // Parse Upgrades
                     NodeList upgradeNodes = officeElement.getElementsByTagName("upgrade");
                     for (int j = 0; j < upgradeNodes.getLength(); j++) {
@@ -112,12 +111,12 @@ public class BoardParser {
                         int amount = Integer.parseInt(upgradeElement.getAttribute("amt"));
                         upgrades.add(new Upgrade(level, currency, amount));
                     }
-
+                    
                     Room office = new Room("Office", neighbors, null, 0);
                     for (Upgrade upgrade : upgrades) {
                         office.addUpgrade(upgrade);
                     }
-
+                    
                     rooms.add(office);
                 }
             } 

@@ -19,21 +19,21 @@ public class Card {
         this.roles = roles;
         this.shown = false; // Initially the card is  face-down
     }
-
-     // Methods
+    
+    // Methods
     public void showCard() {
         this.shown = true;
     }
-
+    
     public void hideCard() {
         this.shown = false;
     }
-
+    
     // Getters
     public String getDesc() {
         return this.sceneDesc;
     }
-
+    
     public String getName() {
         return this.name;
     }
@@ -41,16 +41,16 @@ public class Card {
     public int getBudget() {
         return this.budget;
     }
-
+    
     public ArrayList<Role> getRoles() {
         return this.roles;
     }
-
+    
     public boolean isShown() {
         return shown;
     }
-
-   
-
+    
+    
+    
 }
 
