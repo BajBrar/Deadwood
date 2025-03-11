@@ -13,7 +13,7 @@ public class GameController {
     private int dayNum = 1;
     private int maxDay;
     private int curIndex;
-    private GameView v = new GameView();
+    private GameView v = new GameView(this);
     private ConsoleInput i = new ConsoleInput();
     private int availableScene;
     ArrayList<String> helpOpt = new ArrayList<>();

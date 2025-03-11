@@ -4,7 +4,11 @@
 import java.util.ArrayList;
 
 class GameView implements View{
-    
+    GameController gc;
+    public GameView(GameController gc) {
+        this.gc = gc;
+    }
+
     @Override
     public void displayTurnOptions(int num, ArrayList<String> opts) {
         try {
