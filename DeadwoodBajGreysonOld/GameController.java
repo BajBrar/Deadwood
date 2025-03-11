@@ -2,7 +2,6 @@
 
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.JOptionPane;
 
 public class GameController {
     private ArrayList<Player> players = new ArrayList<>();
@@ -15,42 +14,48 @@ public class GameController {
     private int curIndex;
     private GameView v = new GameView();
     private ConsoleInput i = new ConsoleInput();
-    private int availableScene;
+    private int availableScene = 10;
     ArrayList<String> helpOpt = new ArrayList<>();
-    BoardLayersListener board = new BoardLayersListener();
     
     //Starts the game and sets all necessary values before beginning the game loop
     public void StartGame(String cardFile, String boardFile) {
         int playerCount;
-        String[] pCount = {"2", "3", "4", "5", "6", "7", "8"};
-        board.setVisible(true);
-        // Take input from the user about number of players
-        playerCount = JOptionPane.showOptionDialog(null, "How many players?", "Player Count", 0, 3, null, pCount, null); 
+        v.playerCount();
+        ArrayList<String> pCount = new ArrayList<>();
+        pCount.add("2");
+        pCount.add("3");
+        pCount.add("4");
+        pCount.add("5");
+        pCount.add("6");
+        pCount.add("7");
+        pCount.add("8");
+        String input = inputOpts(pCount);
+        playerCount = Integer.parseInt(input);
         int startRank;
         int startCredit = 0;
         switch (playerCount) {
-            case 0:
-            case 1:
+            case 2:
+            case 3:
             this.maxDay = 3;
             startRank = 1;
-            break;
-            case 2:
-            this.maxDay = 4;
-            startRank = 1;
-            startCredit = 0;
-            break;
-            case 3:
-            this.maxDay = 4;
-            startRank = 1;
-            startCredit = 2;
             break;
             case 4:
             this.maxDay = 4;
             startRank = 1;
-            startCredit = 4;
+            startCredit = 0;
             break;
             case 5:
+            this.maxDay = 4;
+            startRank = 1;
+            startCredit = 2;
+            break;
             case 6:
+            this.maxDay = 4;
+            startRank = 1;
+            startCredit = 4;
+            break;
+            case 7:
+            case 8:
             this.maxDay = 4;
             startRank = 2;
             startCredit = 0;
@@ -61,8 +66,6 @@ public class GameController {
         for (int i = 0; i < playerCount; i++) {
             this.players.add(new Player(i, startRank, "Trailer", startCredit));
         }
-
-        board.bMove.setEnabled(false);
         ArrayList<Card> cards = CardParser.parseCards(cardFile);
         ArrayList<Room> rooms = BoardParser.parseBoard(boardFile);
         this.locMan = new LocationManager(new Board(rooms, cards, players));
@@ -235,7 +238,7 @@ public class GameController {
                 } else {
                     v.displayRankUp(curPlayer.getPlayerNumber(), 0, 0);
                 }
-                continue;
+                break;
                 case "act":
                 int roll = dice.roll() + curPlayer.getPracticeChips();
                 Room curRoom =  locMan.playersRoom(curPlayer);
@@ -247,13 +250,16 @@ public class GameController {
                         curPlayer.setCurAction("idle");
                         v.sceneWrapped(curRoom.getCard().getName());
                         tm.bonusPayout(curRoom);
-                        availableScene--;
-                        if (availableScene == 1) {
+                        if (availableScene > 1) {
+                            availableScene--;
+                        } else {
                             endDay();
+                            System.out.println("DAYENDED");
                         }
-                    }  
+                    }  else {
+                        curPlayer.setCurAction("worked");
+                    }
                     curRoom.remTake();
-                    curPlayer.setCurAction("worked");
                     break;
                     case 3:
                     case 4:
@@ -270,7 +276,7 @@ public class GameController {
                 case "end turn":
                 break;
                 default:
-                throw new AssertionError();
+                break;
             }
             opts.clear();
             if (curPlayer.getStatus().equalsIgnoreCase("moved")) {

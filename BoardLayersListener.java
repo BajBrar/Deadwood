@@ -131,14 +131,4 @@ public class BoardLayersListener extends JFrame {
       public void mouseExited(MouseEvent e) {
       }
    }
-
-
-  public static void main(String[] args) {
-  
-    BoardLayersListener board = new BoardLayersListener();
-    board.setVisible(true);
-    
-    // Take input from the user about number of players
-    JOptionPane.showInputDialog(board, "How many players?"); 
-  }
 }
