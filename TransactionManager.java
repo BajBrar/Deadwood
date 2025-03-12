@@ -67,6 +67,7 @@ public class TransactionManager {
                 } else max--;
             }
         } 
+        room.sceneFinished();
     }
     
     // Attempt to rank up the player's level if they have enough currency

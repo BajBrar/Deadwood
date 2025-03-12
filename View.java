@@ -15,5 +15,6 @@ interface View {
     void displayRehearse(int player, int chips);
     void displayActive(int player, String roomName, int credit, int dollar, String out);
     void displayPlayer(String out);
+    void displayDayEnd(int n);
 }
 

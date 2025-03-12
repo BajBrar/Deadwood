@@ -4,16 +4,12 @@
 import java.util.ArrayList;
 
 class GameView implements View{
-    GameController gc;
-    public GameView(GameController gc) {
-        this.gc = gc;
-    }
-
+    
     @Override
     public void displayTurnOptions(int num, ArrayList<String> opts) {
         try {
             System.out.println("Player " + num + "'s turn!");
-            System.out.println("Choose an option: " + String.join(", ", opts));
+            System.out.println("Choose an option: " + String.join(", ", opts) + ", active?, info");
         } catch (Exception e) {
             System.out.println(e);
             System.exit(-1);
@@ -66,7 +62,7 @@ class GameView implements View{
     @Override
     public void displayOptions(ArrayList<String> opts) {
         try {
-            System.out.println("Type one of the following options: " + String.join(", ", opts));
+            System.out.println("Type one of the following options: " + String.join(", ", opts) + ", active?, info");
         } catch (Exception e) {
             System.out.println(e);
             System.exit(-1);
@@ -107,5 +103,10 @@ class GameView implements View{
     @Override 
     public void displayPlayer(String out) {
         System.out.println(out);
+    }
+
+    @Override
+    public void displayDayEnd(int n) {
+        System.out.println("Day " + n + "has ended.");
     }
 }

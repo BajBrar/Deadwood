@@ -10,9 +10,9 @@ public class LocationManager{
     //Using the name of the room/role it updates the board and player to reflect that.
     public void move(String destination, Player player) {
         if (board.getRoomByName(destination) != null) {
+            playersRoom(player).remOccupant(player);
             player.updatePos(destination);
             getRoom(destination).addOccupant(player);
-            getRoom(player.getStartPosition()).remOccupant(player);
         } else {
             for (Room room: board.getRooms()) { 
                 if (!room.getName().equalsIgnoreCase("trailer") && !room.getName().equalsIgnoreCase("office")) {
@@ -20,14 +20,14 @@ public class LocationManager{
                         if (destination.equals(role.getName())) {
                             player.updatePos(destination);
                             role.takeRole(player);
-                            getRoom(player.getStartPosition()).remOccupant(player);
+                            playersRoom(player).remOccupant(player);
                         }
                     }
                     for (Role role : room.getCard().getRoles()) {
                         if (destination.equals(role.getName())) {
                             player.updatePos(destination);
                             role.takeRole(player);
-                            getRoom(player.getStartPosition()).remOccupant(player);
+                            playersRoom(player).remOccupant(player);
                         }
                     }
                 }

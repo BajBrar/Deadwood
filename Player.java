@@ -43,8 +43,8 @@ public class Player{
   //Resets the player to start a new day 
   public void freshDay() {
     setCurAction("idle");
-    this.curPos = "Trailer";
-    this.startPos = "Trailer";
+    this.curPos = "trailer";
+    this.startPos = "trailer";
     this.practiceChips = 0;
   }
   

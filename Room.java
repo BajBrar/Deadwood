@@ -60,6 +60,7 @@ public class Room {
     //idle and moves them from the roles to the occupants ArrayList
     //Resets practice chips
     public void sceneFinished() {
+        this.accTakes = -1;
         for(Role r: card.getRoles()) {
             if (r.isTaken()) {
                 addOccupant(r.getPlayer());
@@ -117,7 +118,10 @@ public class Room {
     //Resets the room for the next day
     public void reset() {
         this.accTakes = maxTakes;
-        this.occupants.clear();
-        this.extras.clear();
+        //this.occupants.clear();
+        if (this.extras != null) {
+            this.extras.clear();
+        }
     }
 }
+    

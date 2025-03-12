@@ -47,6 +47,7 @@ public class Role {
     //Removes the player from the role
     public void leaveRole() {
         this.taken = false;
+        player.setCurAction("idle");
         this.player = null;
     }
 }
