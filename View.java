@@ -6,12 +6,12 @@ interface View {
     void displayInvalidMove();
     void displayNewCard(String name, String desc, ArrayList<String> roles, ArrayList<String> extras);
     void displayMoveOptions(ArrayList<String> adjacents);
-    void displayOptions(ArrayList<String> opts);
+    String displayOptions(ArrayList<String> opts);
     void displayRankUp(int player, int rank, int newRank);
     void success();
     void fail();
     void sceneWrapped(String sceneName);
-    void playerCount();
+    int playerCount();
     void displayRehearse(int player, int chips);
     void displayActive(int player, String roomName, int credit, int dollar, String out);
     void displayPlayer(String out);

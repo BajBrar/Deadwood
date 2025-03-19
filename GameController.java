@@ -2,6 +2,7 @@
 
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 public class GameController {
     private ArrayList<Player> players = new ArrayList<>();
@@ -12,7 +13,7 @@ public class GameController {
     private int dayNum = 1;
     private int maxDay;
     private int curIndex;
-    private GameView v = new GameView();
+    private GUIView v;
     private ConsoleInput i = new ConsoleInput();
     private int availableScene = 10;
     ArrayList<String> helpOpt = new ArrayList<>();
@@ -22,18 +23,14 @@ public class GameController {
     
     //Starts the game and sets all necessary values before beginning the game loop
     public void StartGame(String cardFile, String boardFile) {
-        int playerCount;
-        v.playerCount();
-        ArrayList<String> pCount = new ArrayList<>();
-        pCount.add("2");
-        pCount.add("3");
-        pCount.add("4");
-        pCount.add("5");
-        pCount.add("6");
-        pCount.add("7");
-        pCount.add("8");
-        String input = inputOpts(pCount);
+        int playerCount = 0;
+        String input = null;
+        while (input == null && playerCount == 0) { 
+            String[] pCount = {"2", "3", "4", "5", "6", "7", "8"};
+            input = (String) JOptionPane.showInputDialog(null, "How many players will play?", "Input" , JOptionPane.INFORMATION_MESSAGE, null, pCount , pCount[0]);
+        }
         playerCount = Integer.parseInt(input);
+        v = new GUIView(this, playerCount);
         int startRank;
         int startCredit = 0;
         switch (playerCount) {
@@ -72,62 +69,41 @@ public class GameController {
         ArrayList<Card> cards = CardParser.parseCards(cardFile);
         ArrayList<Room> rooms = BoardParser.parseBoard(boardFile);
         this.locMan = new LocationManager(new Board(rooms, cards, players));
-        helpOpt.add("active?");
-        helpOpt.add("info");
-        helpOpt.add("end game");
+        Random r = new Random();
+        curIndex = r.nextInt(players.size());
         gameLoop();
     }
     
-    //Based on an ArrayList of strings it requests an input from the user (must be in opt)
-    //There are extra commands that you are able to call at any time and the current players turn is maintained
-    public String inputOpts(ArrayList<String> opt) {
-        String input = "";
-        while (!opt.contains(input)) { 
-            input = i.requestInput();
-            if (helpOpt.contains(input)) { 
-                switch (input) {
-                    case "active?":
-                    Player player = this.players.get(curIndex);
-                    String out = "";
-                    if (player.getStatus().equalsIgnoreCase("working") || player.getStatus().equalsIgnoreCase("worked")) {
-                        out = out.concat(locMan.playersRoom(player).getName() + " working as " + locMan.getRole(player).getName() + ", \"" + locMan.getRole(player).getLine() + "\"");
-                    } else {
-                        out = out.concat(locMan.playersRoom(player).getName() + ".");
-                    }
-                    v.displayActive(player.getPlayerNumber(), locMan.playersRoom(player).getName(), player.getCredits(), player.getDollars(), out);
-                    break;
-                    case "info":
-                    System.out.println("Scene Remaining: " + availableScene);
-                    for (Player p: players) {
-                        if (curIndex == p.getPlayerNumber()) {
-                            v.displayPlayer("(Active) Player " + p.getPlayerNumber() + ":\n\tRoom: " + locMan.playersRoom(p).getName());
-                        } else {
-                            v.displayPlayer("Player " + p.getPlayerNumber() + ":\n\tRoom: " + locMan.playersRoom(p).getName());
-                        }
-                        
-                    }
-                    break;
-                    case "end game":
-                    dayNum = maxDay;
-                    endDay();
-                    break;
-                }
-                if (gameOver == false) {
-                    v.displayOptions(opt);  
-                    continue;
-                }
-            }
-            if (!opt.contains(input) && gameOver == false) {
-                v.displayInvalidInput();
-                v.displayOptions(opt);
-            }
-            if (gameOver == true) {
-                break;
-            }
+    
+    public void startTurn() {
+        curPlayer = this.players.get(this.curIndex);
+        if (locMan.playersRoom(curPlayer).getName().equalsIgnoreCase("Office") && curPlayer.getRank() < 6) {
+            opts.add("upgrade");
         }
-        return input;
+        if (curPlayer.getStatus().equals("idle")) {
+            opts.add("move");
+        } else if (curPlayer.getStatus().equals("working")) {
+            opts.add("act");
+            if (curPlayer.getPracticeChips() < locMan.playersRoom(curPlayer).getCard().getBudget()) {
+                opts.add("rehearse");
+            }
+        } 
+        opts.add("end turn");
+        v.displayTurnOptions(curPlayer.getPlayerNumber(), opts);
     }
     
+    public void endTurn() {
+        if (curPlayer.getStatus().equalsIgnoreCase("moved")) {
+            curPlayer.setCurAction("idle");
+        } else if (curPlayer.getStatus().equalsIgnoreCase("worked")) {
+            curPlayer.setCurAction("working");
+        }
+        if (this.curIndex == this.players.size() - 1) {
+            this.curIndex = 0;
+        } else { this.curIndex += 1; }
+        opts.clear();
+        gameLoop();
+    }
     
     //This method will end the day but first check that it is not the last day
     //If it is the last day it will calculate the scores and display the winners.
@@ -147,67 +123,26 @@ public class GameController {
     
     //This is the game loop and has the main portion of the logic necessary during gameplay.
     public void gameLoop() {
-        Random r = new Random();
-        curIndex = r.nextInt(players.size());
-        while(gameOver == false) {
-            curPlayer = this.players.get(this.curIndex);
-            if (locMan.playersRoom(curPlayer).getName().equalsIgnoreCase("Office") && curPlayer.getRank() < 6) {
-                opts.add("upgrade");
-            }
-            if (curPlayer.getStatus().equals("idle")) {
-                opts.add("move");
-            } else if (curPlayer.getStatus().equals("working")) {
-                opts.add("act");
-                if (curPlayer.getPracticeChips() < locMan.playersRoom(curPlayer).getCard().getBudget()) {
-                    opts.add("rehearse");
-                }
-            } 
-            opts.add("end turn");
-            v.displayTurnOptions(curPlayer.getPlayerNumber(), opts);
-            String s = inputOpts(opts);
-            switch (s) {
-                case "move":
-                move();
-                if (!locMan.playersRoom(curPlayer).getName().equalsIgnoreCase("office")) {
-                    break;
-                }
-                case "upgrade":
-                upgrade();
-                break;
-                case "act":
-                act();
-                break;
-                case "rehearse":
-                rehearse();
-                break;
-                case "end turn":
-                break;
-                default:
-                break;
-            }
+        if(gameOver == false) {
+            startTurn();
             opts.clear();
-            if (curPlayer.getStatus().equalsIgnoreCase("moved")) {
-                curPlayer.setCurAction("idle");
-            } else if (curPlayer.getStatus().equalsIgnoreCase("worked")) {
-                curPlayer.setCurAction("working");
-            }
-            if (this.curIndex == this.players.size() - 1) {
-                this.curIndex = 0;
-            } else { this.curIndex += 1; }
         }
     }
+    
+    
+    
     
     public void rehearse() {
         curPlayer.setPracticeChips(curPlayer.getPracticeChips() + 1);
         v.displayRehearse(curPlayer.getPlayerNumber(), curPlayer.getPracticeChips());
         curPlayer.setCurAction("worked");
+        endTurn();
     }
     
     
     public void move() {
         opts.clear();
-        v.displayMoveOptions(locMan.playersRoom(curPlayer).getAdjacent());
-        String s = inputOpts(locMan.playersRoom(curPlayer).getAdjacent());
+        String s = v.displayOptions(locMan.playersRoom(curPlayer).getAdjacent());
         if (s.equalsIgnoreCase("trailer") || s.equalsIgnoreCase("office")) {
             locMan.move(s, curPlayer);
             curPlayer.setCurAction("moved");
@@ -245,8 +180,8 @@ public class GameController {
                 locMan.move(locMan.getRoom(s).getName(), curPlayer);
                 curPlayer.setCurAction("moved");
             } else {
-                v.displayOptions(opts);
-                String inp = inputOpts(opts);
+                
+                String inp = v.displayOptions(opts);
                 if (inp.equalsIgnoreCase("Pass")) {
                     locMan.move(locMan.getRoom(s).getName(), curPlayer);
                     curPlayer.setCurAction("moved");
@@ -257,11 +192,32 @@ public class GameController {
                 }
             }
         }
+        endTurn();
+    }
+    
+    
+    public void turn(String choice) {
+        switch (choice) {
+            case "act":
+            act();
+            break;
+            case "rehearse":
+            rehearse();
+            break;
+            case "upgrade":
+            upgrade();
+            break;
+            case "move":
+            move();
+            break;
+            case "end turn":
+            endTurn();
+            break;
+        }
     }
     
     
     public void act() {
-        
         int roll = dice.roll() + curPlayer.getPracticeChips();
         Room curRoom =  locMan.playersRoom(curPlayer);
         switch (tm.cashOut(curPlayer, locMan, roll)) {
@@ -289,6 +245,7 @@ public class GameController {
             v.fail();
             break;
         } 
+        endTurn();
     }
     
     public void upgrade() {
@@ -298,15 +255,15 @@ public class GameController {
                 opts.add(String.valueOf(i));
             }
         }
-        v.displayOptions(opts);
-        String s = inputOpts(opts);
+        
+        String s = v.displayOptions(opts);
         opts.clear();
         opts.add("Credits");
         opts.add("Dollars");
-        v.displayOptions(opts);
+        
         boolean useDollars;
         int oldRank = curPlayer.getRank();
-        if (inputOpts(opts).equalsIgnoreCase("Dollars")) {
+        if (v.displayOptions(opts).equalsIgnoreCase("Dollars")) {
             useDollars = true;
         } else useDollars = false;
         if (tm.rankUp(curPlayer, Integer.parseInt(s), useDollars, locMan.getRoom("Office"))) {
@@ -314,9 +271,7 @@ public class GameController {
         } else {
             v.displayRankUp(curPlayer.getPlayerNumber(), 0, 0);
         }
+    endTurn();
     }
-    
-    
-    
     
 }

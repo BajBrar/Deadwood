@@ -60,13 +60,14 @@ class GameView implements View{
         }
     }
     @Override
-    public void displayOptions(ArrayList<String> opts) {
+    public String displayOptions(ArrayList<String> opts) {
         try {
             System.out.println("Type one of the following options: " + String.join(", ", opts) + ", active?, info");
         } catch (Exception e) {
             System.out.println(e);
             System.exit(-1);
         }
+        return null;
     }
     @Override
     public void displayRankUp(int player, int rank, int newRank) {
@@ -89,8 +90,9 @@ class GameView implements View{
         System.out.println("" + sceneName + " has wrapped! Great job everyone!");
     }
     @Override
-    public void playerCount() {
+    public int playerCount() {
         System.out.println("How many players will be playing? [2-8] (inclusive)");
+        return 0;
     }
     @Override
     public void displayRehearse(int player, int chips) {

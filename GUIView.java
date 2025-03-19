@@ -1,78 +1,95 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
+import javax.swing.*;
 
 class GUIView extends GameView {
     private GameController gc;
-    private ArrayList<JButton> buttons;
     private JFrame board;
     private JPanel buttonPanel;
     private JTextArea gameLog;
+    private JLayeredPane bPane;
+    private JLabel boardLabel;
+    private JLabel mLabel;
+    private JTable scoreboard;
 
-
-    public GUIView(GameController gc) {
-        // super(gc);
-        // board = new JFrame("Deadwood");
+    public GUIView(GameController gc, int playerCount) {
         // Will set up the visual part of the board
         // Uses data from the GameController
         this.gc = gc;
+        int pCount = playerCount();
         board = new JFrame("Deadwood Game");
         board.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        board.setSize(800, 600);
-        board.setLayout(new BorderLayout());
-
-        // Panel for buttons
+        
+        bPane = board.getLayeredPane();
+        boardLabel = new JLabel();
+        ImageIcon icon = new ImageIcon("board.jpg");
+        boardLabel.setIcon(icon);
+        boardLabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
+        bPane.add(boardLabel, 0);
+        board.setSize(icon.getIconWidth() + 200, icon.getIconHeight() + 35);
+        
+        
+        mLabel = new JLabel("MENU");
+        mLabel.setBounds(icon.getIconWidth()+80,0,200,20);
+        bPane.add(mLabel,2);
+        
+    
         buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2, 3, 5, 5)); 
-        buttons = new ArrayList<>();
-
+        buttonPanel.setBounds(icon.getIconWidth(), 25, 200, icon.getIconHeight() - 25);
+        buttonPanel.setBackground(Color.green);
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, 1));
+        bPane.add(buttonPanel, 2);
+        
+        
+        
+        
+        
         // Text area to log game events
         gameLog = new JTextArea();
         gameLog.setEditable(false);
         JScrollPane logScroll = new JScrollPane(gameLog);
         
         // Add components to the frame
-        board.add(buttonPanel, BorderLayout.SOUTH);
-        board.add(logScroll, BorderLayout.CENTER);
-        
+
         board.setVisible(true);
-
+        
     }
-
+    
     private void appendToLog(String text) {
         gameLog.append(text);
         gameLog.setCaretPosition(gameLog.getDocument().getLength());
     }
-
+    
     @Override
     public void displayTurnOptions(int num, ArrayList<String> opts) {
         // Create a list of buttons from the ArrayList
         // Listeners activate GameController methods
         buttonPanel.removeAll(); 
-        buttons.clear();
-        
         for (String opt : opts) {
             JButton button = new JButton(opt);
+            button.setPreferredSize(new Dimension(200, 25));
+            button.setMaximumSize(new Dimension(200,25));
+            button.setMinimumSize(new Dimension(200,25));
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    gc.inputOpts(new ArrayList<>(List.of(opt))); // Pass selected option to controller
+                    gc.turn(opt); // Pass selected option to controller
                 }
             });
-            buttons.add(button);
+            
             buttonPanel.add(button);
         }
         
         buttonPanel.revalidate();
+        buttonPanel.validate();
         buttonPanel.repaint();
     }
     
     @Override
     public void displayWinner(int[] winners) {
-
+        
     }
     
     @Override
@@ -96,8 +113,13 @@ class GUIView extends GameView {
     }
     
     @Override
-    public void displayOptions(ArrayList<String> opts) {
-        
+    public String displayOptions(ArrayList<String> opts) {
+        String input = null;
+        while (input == null) { 
+            Object[] optArr = opts.toArray();
+            input = (String) JOptionPane.showInputDialog(null, "Choose one of the following:", "Input" , JOptionPane.INFORMATION_MESSAGE, null, optArr , optArr[0]);
+        }
+        return input;
     }
     
     @Override
@@ -121,8 +143,8 @@ class GUIView extends GameView {
     }
     
     @Override
-    public void playerCount() {
-        
+    public int playerCount() {
+        return 0;
     }
     
     @Override
