@@ -48,7 +48,7 @@ public class CardParser {
                     String partName = partElement.getAttribute("name");
                     int level = Integer.parseInt(partElement.getAttribute("level"));
                     String line = partElement.getElementsByTagName("line").item(0).getTextContent().trim();
-                    roles.add(new Role(partName, level, line));
+                    roles.add(new Role(partName, level, line, x, y, w, h));
                 }
                 
                 cards.add(new Card(name, img, budget, x, y, h, w, scene.number, scene.description, roles));

@@ -14,12 +14,14 @@ class Set {
 
 class Take {
     int number;
+    int x, y, w, h;
 }
 
 class Part {
     String name;
     int level;
     String line;
+    int x, y, w, h;
 }
 
 public class BoardParser {
@@ -54,6 +56,14 @@ public class BoardParser {
                         Element takeElement = (Element) takes.item(j);
                         Take take = new Take();
                         take.number = Integer.parseInt(takeElement.getAttribute("number"));
+                        
+                        Element takeArea = (Element) takeElement.getElementsByTagName("area").item(0);
+                        if (takeArea != null) {
+                            take.x = Integer.parseInt(takeArea.getAttribute("x"));
+                            take.y = Integer.parseInt(takeArea.getAttribute("y"));
+                            take.w = Integer.parseInt(takeArea.getAttribute("w"));
+                            take.h = Integer.parseInt(takeArea.getAttribute("h"));
+                        }
                         set.takes.add(take);
                     }
                     
@@ -65,12 +75,19 @@ public class BoardParser {
                         part.name = partElement.getAttribute("name");
                         part.level = Integer.parseInt(partElement.getAttribute("level"));
                         part.line = partElement.getElementsByTagName("line").item(0).getTextContent();
-                        set.parts.add(new Role(part.name, part.level, part.line));
                         
+                        Element partArea = (Element) partElement.getElementsByTagName("area").item(0);
+                        if (partArea != null) {
+                            part.x = Integer.parseInt(partArea.getAttribute("x"));
+                            part.y = Integer.parseInt(partArea.getAttribute("y"));
+                            part.w = Integer.parseInt(partArea.getAttribute("w"));
+                            part.h = Integer.parseInt(partArea.getAttribute("h"));
+                        }
+                        
+                        set.parts.add(new Role(part.name, part.level, part.line, part.x, part.y, part.w, part.h));
                     }
-                    //rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size()));
                     
-                    // Parse x, y, w, h
+                    // Parse x, y, w, h for the set itself
                     Element areaElement = (Element) setElement.getElementsByTagName("area").item(0);
                     if (areaElement != null) {
                         set.x = Integer.parseInt(areaElement.getAttribute("x"));

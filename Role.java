@@ -4,14 +4,19 @@ public class Role {
     private boolean taken;
     private Player player; // Store the player assigned to this role
     private String line;
+    private int x, y, w, h;
     
     
     //Role constructor
-    public Role(String name, int rankRequirement, String line) {
+    public Role(String name, int rankRequirement, String line, int x, int y, int w, int h) {
         this.name = name;
         this.rankRequirement = rankRequirement;
         this.taken = false;
         this.line = line;
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
         this.player = null; // No player assigned initially
     }
     
