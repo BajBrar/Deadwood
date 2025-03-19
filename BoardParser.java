@@ -68,7 +68,7 @@ public class BoardParser {
                         set.parts.add(new Role(part.name, part.level, part.line));
                         
                     }
-                    rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size()));
+                    //rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size()));
                     
                     // Parse x, y, w, h
                     Element areaElement = (Element) setElement.getElementsByTagName("area").item(0);
@@ -79,7 +79,7 @@ public class BoardParser {
                         set.h = Integer.parseInt(areaElement.getAttribute("h"));
                     }
                     
-                    // rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size(), set.x, set.y, set.w, set.h));
+                    rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size(), set.x, set.y, set.w, set.h));
                 }
             }
             
@@ -94,7 +94,7 @@ public class BoardParser {
                     for (int j = 0; j < neighborList.getLength(); j++) {
                         neighbors.add(((Element) neighborList.item(j)).getAttribute("name"));
                     }
-                    rooms.add(new Room("Trailer", neighbors, null, 0));
+                    rooms.add(new Room("Trailer", neighbors, null, 0, 0, 0,0, 0));
                 }
             }
             
@@ -123,7 +123,7 @@ public class BoardParser {
                         upgrades.add(new Upgrade(level, currency, amount));
                     }
                     
-                    Room office = new Room("Office", neighbors, null, 0);
+                    Room office = new Room("Office", neighbors, null, 0, 0, 0, 0, 0);
                     for (Upgrade upgrade : upgrades) {
                         office.addUpgrade(upgrade);
                     }

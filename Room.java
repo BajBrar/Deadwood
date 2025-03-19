@@ -14,7 +14,7 @@ public class Room {
     private int x, y, w, h;
     
     //Constructor
-    public Room(String name, ArrayList<String> adjacentRooms, ArrayList<Role> extras, int maxTakes) {
+    public Room(String name, ArrayList<String> adjacentRooms, ArrayList<Role> extras, int maxTakes, int x, int y, int w, int h) {
         this.name = name;
         this.adjacentRooms = adjacentRooms;
         this.maxTakes = maxTakes;

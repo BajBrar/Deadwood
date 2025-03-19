@@ -38,8 +38,9 @@ class GUIView extends GameView {
     
         buttonPanel = new JPanel();
         buttonPanel.setBounds(icon.getIconWidth(), 25, 200, icon.getIconHeight() - 25);
-        buttonPanel.setBackground(Color.green);
+        buttonPanel.setBackground(Color.LIGHT_GRAY);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, 1));
+        //scoreboard = new JTable(, {"Player", "Money", "Credits", "Practie Chips"});
         bPane.add(buttonPanel, 2);
         
         
