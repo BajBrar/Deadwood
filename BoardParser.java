@@ -9,6 +9,7 @@ class Set {
     ArrayList<String> neighbors = new ArrayList<>();
     ArrayList<Take> takes = new ArrayList<>();
     ArrayList<Role> parts = new ArrayList<>();
+    int x, y, w, h;
 }
 
 class Take {
@@ -69,6 +70,16 @@ public class BoardParser {
                     }
                     rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size()));
                     
+                    // Parse x, y, w, h
+                    Element areaElement = (Element) setElement.getElementsByTagName("area").item(0);
+                    if (areaElement != null) {
+                        set.x = Integer.parseInt(areaElement.getAttribute("x"));
+                        set.y = Integer.parseInt(areaElement.getAttribute("y"));
+                        set.w = Integer.parseInt(areaElement.getAttribute("w"));
+                        set.h = Integer.parseInt(areaElement.getAttribute("h"));
+                    }
+                    
+                    // rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size(), set.x, set.y, set.w, set.h));
                 }
             }
             

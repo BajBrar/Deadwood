@@ -9,6 +9,9 @@ public class Room {
     private int maxTakes;
     private int accTakes;
     private ArrayList<Upgrade> upgrades = new ArrayList<>();
+
+    //size and location variables
+    private int x, y, w, h;
     
     //Constructor
     public Room(String name, ArrayList<String> adjacentRooms, ArrayList<Role> extras, int maxTakes) {
@@ -17,8 +20,29 @@ public class Room {
         this.maxTakes = maxTakes;
         this.accTakes = maxTakes;
         this.extras = extras;
+        //I got null exception so adding this check here 
+        this.extras = (extras != null) ? extras : new ArrayList<>();
         this.card = null;
+
+         // Initialize position and size
+         this.x = x;
+         this.y = y;
+         this.w = w;
+         this.h = h;
     }
+
+    // New constructor (with x, y, w, h) // I overloaded the constructor to include x, y, w, h. Not sure if we can do this. It broke the game
+    // public Room(String name, ArrayList<String> adjacentRooms, ArrayList<Role> extras, int maxTakes, int x, int y, int w, int h) {
+    //     this.name = name;
+    //     this.adjacentRooms = adjacentRooms;
+    //     this.maxTakes = maxTakes;
+    //     this.accTakes = maxTakes;
+    //     this.extras = (extras != null) ? extras : new ArrayList<>();
+    //     this.x = x;
+    //     this.y = y;
+    //     this.w = w;
+    //     this.h = h;
+    // }
     
     //Used for parsing upgrade values from the xml file.
     public void addUpgrade(Upgrade upgrade) {

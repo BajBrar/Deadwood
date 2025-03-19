@@ -8,7 +8,7 @@ JFrame board;
 
 
     public GUIView(GameController gc) {
-        super(gc);
+        // super(gc);
         board = new JFrame("Deadwood");
         // Will set up the visual part of the board
         // Uses data from the GameController
