@@ -7,6 +7,7 @@ import org.w3c.dom.*;
 class Scene {
     int number;
     String description;
+    int x, y, w, h;
     
     public Scene(int number, String description) {
         this.number = number;
@@ -30,6 +31,10 @@ public class CardParser {
                 String name = cardElement.getAttribute("name");
                 String img = cardElement.getAttribute("img");
                 int budget = Integer.parseInt(cardElement.getAttribute("budget"));
+                int x = Integer.parseInt(cardElement.getAttribute("x"));
+                int y = Integer.parseInt(cardElement.getAttribute("y"));
+                int h = Integer.parseInt(cardElement.getAttribute("h"));
+                int w = Integer.parseInt(cardElement.getAttribute("w"));
                 
                 Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
                 int sceneNumber = Integer.parseInt(sceneElement.getAttribute("number"));
@@ -46,7 +51,8 @@ public class CardParser {
                     roles.add(new Role(partName, level, line));
                 }
                 
-                cards.add(new Card(name, img, budget, scene.number, scene.description, roles));
+                cards.add(new Card(name, img, budget, x, y, h, w, scene.number, scene.description, roles));
+
             }
         } catch (Exception e) {
             e.printStackTrace();
