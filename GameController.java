@@ -81,6 +81,7 @@ public class GameController {
     }
     
     
+    
     public void startTurn() {
         curPlayer = this.players.get(this.curIndex);
         if (locMan.playersRoom(curPlayer).getName().equalsIgnoreCase("Office") && curPlayer.getRank() < 6) {

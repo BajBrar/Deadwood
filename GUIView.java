@@ -14,12 +14,12 @@ class GUIView extends GameView {
     private JLabel boardLabel;
     private JLabel mLabel;
     private JLabel scoreboard;
+    private JTable table;
     ImageIcon clapper = new ImageIcon("shot.png");
     ImageIcon icon = new ImageIcon("board.jpg");
     HashMap<String, JLabel> allShots = new HashMap<String, JLabel>();
     HashMap<String, JLabel> cards = new HashMap<>();
-
-
+    
     public GUIView(GameController gc, int playerCount) {
         // Will set up the visual part of the board
         // Uses data from the GameController
@@ -35,11 +35,8 @@ class GUIView extends GameView {
         boardLabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
         bPane.add(boardLabel, 0);
         board.setSize(icon.getIconWidth() + 200, icon.getIconHeight() + 35);
-        
-        
         mLabel.setBounds(icon.getIconWidth()+80,0,200,20);
         bPane.add(mLabel,2);
-        
         buttonPanel = new JPanel();
         buttonPanel.setBounds(icon.getIconWidth(), 25, 200, icon.getIconHeight() - 25);
         buttonPanel.setBackground(Color.LIGHT_GRAY);
@@ -49,21 +46,15 @@ class GUIView extends GameView {
         scoreboard.setBackground(Color.BLUE);
         scoreboard.setVisible(true);
         scoreboard.setOpaque(true);
-        scoreboard.setLayout(new BorderLayout());
-        scoreboard.add(new JLabel(), BorderLayout.NORTH);
-        bPane.add(scoreboard, Integer.valueOf(6));
+        scoreboard.setLayout(new BoxLayout(scoreboard, 1));
         
-
-
         // Add components to the frame
         board.add(bPane, BorderLayout.CENTER);
         board.setVisible(true);
-        
     }
     
-    
-    
-
+    //This method removes a specific shot counter by setting it's visibility to false then updates the 
+    //bPane to ensure consistency
     public void remShot(String roomName, int num) {
         JLabel shotLabel = allShots.get(roomName + num);
         if (shotLabel != null) {
@@ -72,9 +63,9 @@ class GUIView extends GameView {
             bPane.repaint();
         }
     }
-
-
     
+    //This method uses the room name and the data from the parsed xml document to place the shot counters on 
+    //the correct spots. Again it repaints to ensure consistency.
     public void setShots(String roomName, ArrayList<Take> takes) {
         for (Take t : takes) {
             String key = roomName + t.number;
@@ -90,8 +81,6 @@ class GUIView extends GameView {
         bPane.repaint();
     }
     
-    
-    
     @Override
     public void displayTurnOptions(int num, ArrayList<String> opts) {
         // Create a list of buttons from the ArrayList
@@ -106,6 +95,7 @@ class GUIView extends GameView {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     gc.turn(opt); // Pass selected option to controller
+
                 }
             });
             
