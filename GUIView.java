@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
+import java.util.HashMap;
 
 class GUIView extends GameView {
     private GameController gc;
@@ -12,56 +13,84 @@ class GUIView extends GameView {
     private JLayeredPane bPane;
     private JLabel boardLabel;
     private JLabel mLabel;
-    private JTable scoreboard;
+    private JLabel scoreboard;
+    ImageIcon clapper = new ImageIcon("shot.png");
+    ImageIcon icon = new ImageIcon("board.jpg");
+    HashMap<String, JLabel> allShots = new HashMap<String, JLabel>();
+    HashMap<String, JLabel> cards = new HashMap<>();
+
 
     public GUIView(GameController gc, int playerCount) {
         // Will set up the visual part of the board
         // Uses data from the GameController
         this.gc = gc;
-        int pCount = playerCount();
         board = new JFrame("Deadwood Game");
-        board.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        bPane = board.getLayeredPane();
+        scoreboard = new JLabel();
+        bPane = new JLayeredPane();
         boardLabel = new JLabel();
-        ImageIcon icon = new ImageIcon("board.jpg");
+        mLabel = new JLabel("MENU");
+        board.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        board.setLayout(new BorderLayout());
         boardLabel.setIcon(icon);
         boardLabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
         bPane.add(boardLabel, 0);
         board.setSize(icon.getIconWidth() + 200, icon.getIconHeight() + 35);
         
         
-        mLabel = new JLabel("MENU");
         mLabel.setBounds(icon.getIconWidth()+80,0,200,20);
         bPane.add(mLabel,2);
         
-    
         buttonPanel = new JPanel();
         buttonPanel.setBounds(icon.getIconWidth(), 25, 200, icon.getIconHeight() - 25);
         buttonPanel.setBackground(Color.LIGHT_GRAY);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, 1));
-        //scoreboard = new JTable(, {"Player", "Money", "Credits", "Practie Chips"});
         bPane.add(buttonPanel, 2);
+        scoreboard.setBounds(icon.getIconWidth(), icon.getIconHeight() - 200, 200, 200);
+        scoreboard.setBackground(Color.BLUE);
+        scoreboard.setVisible(true);
+        scoreboard.setOpaque(true);
+        scoreboard.setLayout(new BorderLayout());
+        scoreboard.add(new JLabel(), BorderLayout.NORTH);
+        bPane.add(scoreboard, Integer.valueOf(6));
         
-        
-        
-        
-        
-        // Text area to log game events
-        gameLog = new JTextArea();
-        gameLog.setEditable(false);
-        JScrollPane logScroll = new JScrollPane(gameLog);
-        
-        // Add components to the frame
 
+
+        // Add components to the frame
+        board.add(bPane, BorderLayout.CENTER);
         board.setVisible(true);
         
     }
     
-    private void appendToLog(String text) {
-        gameLog.append(text);
-        gameLog.setCaretPosition(gameLog.getDocument().getLength());
+    
+    
+
+    public void remShot(String roomName, int num) {
+        JLabel shotLabel = allShots.get(roomName + num);
+        if (shotLabel != null) {
+            shotLabel.setVisible(false);   
+            bPane.revalidate();
+            bPane.repaint();
+        }
     }
+
+
+    
+    public void setShots(String roomName, ArrayList<Take> takes) {
+        for (Take t : takes) {
+            String key = roomName + t.number;
+            JLabel shotLabel = new JLabel();
+            shotLabel.setIcon(new ImageIcon("shot.png"));
+            shotLabel.setBounds(t.x, t.y, clapper.getIconWidth(), clapper.getIconHeight());
+            shotLabel.setVisible(true);
+            shotLabel.setOpaque(true);
+            allShots.put(key, shotLabel);
+            bPane.add(allShots.get(roomName + t.number), Integer.valueOf(3));
+        }
+        bPane.revalidate();
+        bPane.repaint();
+    }
+    
+    
     
     @Override
     public void displayTurnOptions(int num, ArrayList<String> opts) {
@@ -95,17 +124,15 @@ class GUIView extends GameView {
     
     @Override
     public void displayInvalidInput() {
-        appendToLog("Invalid input. Try again.\n");
+        
     }
     
     @Override
     public void displayInvalidMove() {
-        appendToLog("Invalid move. Choose another action.\n");
     }
     
     @Override
     public void displayNewCard(String name, String desc, ArrayList<String> roles, ArrayList<String> extras) {
-        appendToLog("New scene: " + name + " - " + desc + "\nRoles: " + roles + "\nExtras: " + extras + "\n");
     }
     
     @Override
@@ -160,6 +187,5 @@ class GUIView extends GameView {
     
     @Override
     public void displayPlayer(String out) {
-        appendToLog(out + "\n");
     }    
 }

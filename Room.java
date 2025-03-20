@@ -9,40 +9,34 @@ public class Room {
     private int maxTakes;
     private int accTakes;
     private ArrayList<Upgrade> upgrades = new ArrayList<>();
-
+    private ArrayList<Take> takes;
     //size and location variables
     private int x, y, w, h;
     
     //Constructor
-    public Room(String name, ArrayList<String> adjacentRooms, ArrayList<Role> extras, int maxTakes, int x, int y, int w, int h) {
+    public Room(String name, ArrayList<String> adjacentRooms, ArrayList<Role> extras, ArrayList<Take> takes, int x, int y, int w, int h) {
         this.name = name;
         this.adjacentRooms = adjacentRooms;
-        this.maxTakes = maxTakes;
-        this.accTakes = maxTakes;
+        if (takes != null) {
+            this.maxTakes = takes.size();
+            this.accTakes = takes.size();
+        } else {
+            this.maxTakes = -1;
+            this.accTakes = -1;
+        }
         this.extras = extras;
+        this.takes = takes;
         //I got null exception so adding this check here 
         this.extras = (extras != null) ? extras : new ArrayList<>();
         this.card = null;
-
-         // Initialize position and size
-         this.x = x;
-         this.y = y;
-         this.w = w;
-         this.h = h;
+        
+        // Initialize position and size
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
     }
-
-    // New constructor (with x, y, w, h) // I overloaded the constructor to include x, y, w, h. Not sure if we can do this. It broke the game
-    // public Room(String name, ArrayList<String> adjacentRooms, ArrayList<Role> extras, int maxTakes, int x, int y, int w, int h) {
-    //     this.name = name;
-    //     this.adjacentRooms = adjacentRooms;
-    //     this.maxTakes = maxTakes;
-    //     this.accTakes = maxTakes;
-    //     this.extras = (extras != null) ? extras : new ArrayList<>();
-    //     this.x = x;
-    //     this.y = y;
-    //     this.w = w;
-    //     this.h = h;
-    // }
+    
     
     //Used for parsing upgrade values from the xml file.
     public void addUpgrade(Upgrade upgrade) {
@@ -147,5 +141,9 @@ public class Room {
             this.extras.clear();
         }
     }
-}
     
+    public ArrayList<Take> getTakes() {
+        return takes;
+    }
+}
+

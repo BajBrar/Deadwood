@@ -96,7 +96,7 @@ public class BoardParser {
                         set.h = Integer.parseInt(areaElement.getAttribute("h"));
                     }
                     
-                    rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes.size(), set.x, set.y, set.w, set.h));
+                    rooms.add(new Room(set.name, set.neighbors, set.parts, set.takes, set.x, set.y, set.w, set.h));
                 }
             }
             
@@ -111,7 +111,7 @@ public class BoardParser {
                     for (int j = 0; j < neighborList.getLength(); j++) {
                         neighbors.add(((Element) neighborList.item(j)).getAttribute("name"));
                     }
-                    rooms.add(new Room("Trailer", neighbors, null, 0, 0, 0,0, 0));
+                    rooms.add(new Room("Trailer", neighbors, null, null, 0, 0,0, 0));
                 }
             }
             
@@ -140,7 +140,7 @@ public class BoardParser {
                         upgrades.add(new Upgrade(level, currency, amount));
                     }
                     
-                    Room office = new Room("Office", neighbors, null, 0, 0, 0, 0, 0);
+                    Room office = new Room("Office", neighbors, null, null, 0, 0, 0, 0);
                     for (Upgrade upgrade : upgrades) {
                         office.addUpgrade(upgrade);
                     }

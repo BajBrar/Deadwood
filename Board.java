@@ -44,7 +44,7 @@ public class Board {
         for (Room room : rooms) {  
             if (room.getOccupants().contains(player)) {
                 retRoom = room;
-            } else if (!room.getName().equalsIgnoreCase("office") && !room.getName().equalsIgnoreCase("trailer")) {
+            } else if (!room.getName().equalsIgnoreCase("Office") && !room.getName().equalsIgnoreCase("Trailer")) {
                 for (Role role : room.getAllRoles()) {
                     if (role.isTaken() && role.getPlayer() == player) {
                         retRoom = room;

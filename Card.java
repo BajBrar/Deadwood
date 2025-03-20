@@ -8,16 +8,11 @@ public class Card {
     private int sceneNum;
     private String sceneDesc;
     private String img;
-    private int x, y, w, h;
     
     // Constructor
-    public Card(String name, String img,  int x, int y, int w, int h, int budget, int sceneNum, String sceneDesc, ArrayList<Role> roles) {
+    public Card(String name, String img, int budget, int sceneNum, String sceneDesc, ArrayList<Role> roles) {
         this.name = name;
         this.img = img;
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
         this.budget = budget;
         this.sceneNum = sceneNum;
         this.sceneDesc = sceneDesc;

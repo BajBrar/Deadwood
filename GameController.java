@@ -69,6 +69,12 @@ public class GameController {
         ArrayList<Card> cards = CardParser.parseCards(cardFile);
         ArrayList<Room> rooms = BoardParser.parseBoard(boardFile);
         this.locMan = new LocationManager(new Board(rooms, cards, players));
+        for (Room r : rooms) {
+            if (r.getTakes() != null) {
+                v.setShots(r.getName(), r.getTakes());
+            }
+        }
+        //v.update();
         Random r = new Random();
         curIndex = r.nextInt(players.size());
         gameLoop();
@@ -129,6 +135,9 @@ public class GameController {
         }
     }
     
+    public ArrayList<Room> getRooms() {
+        return locMan.allRooms();
+    }
     
     
     
@@ -204,11 +213,11 @@ public class GameController {
             case "rehearse":
             rehearse();
             break;
-            case "upgrade":
-            upgrade();
-            break;
             case "move":
             move();
+            break;
+            case "upgrade":
+            upgrade();
             break;
             case "end turn":
             endTurn();
@@ -225,6 +234,7 @@ public class GameController {
             case 2:
             v.success();
             if (curRoom.remainingTake() <= 1) {
+                v.remShot(curRoom.getName(), curRoom.remainingTake());
                 curPlayer.setCurAction("idle");
                 v.sceneWrapped(curRoom.getCard().getName());
                 tm.bonusPayout(curRoom);
@@ -236,6 +246,7 @@ public class GameController {
                 
             }  else {
                 curPlayer.setCurAction("worked");
+                v.remShot(curRoom.getName(), curRoom.remainingTake());
                 curRoom.remTake();
             }
             break;
@@ -271,7 +282,7 @@ public class GameController {
         } else {
             v.displayRankUp(curPlayer.getPlayerNumber(), 0, 0);
         }
-    endTurn();
+        endTurn();
     }
     
 }

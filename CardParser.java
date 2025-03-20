@@ -31,10 +31,6 @@ public class CardParser {
                 String name = cardElement.getAttribute("name");
                 String img = cardElement.getAttribute("img");
                 int budget = Integer.parseInt(cardElement.getAttribute("budget"));
-                int x = Integer.parseInt(cardElement.getAttribute("x"));
-                int y = Integer.parseInt(cardElement.getAttribute("y"));
-                int h = Integer.parseInt(cardElement.getAttribute("h"));
-                int w = Integer.parseInt(cardElement.getAttribute("w"));
                 
                 Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
                 int sceneNumber = Integer.parseInt(sceneElement.getAttribute("number"));
@@ -44,15 +40,25 @@ public class CardParser {
                 ArrayList<Role> roles = new ArrayList<>();
                 NodeList partNodes = cardElement.getElementsByTagName("part");
                 for (int j = 0; j < partNodes.getLength(); j++) {
+                    int x, y, h, w;
+                    
                     Element partElement = (Element) partNodes.item(j);
                     String partName = partElement.getAttribute("name");
                     int level = Integer.parseInt(partElement.getAttribute("level"));
                     String line = partElement.getElementsByTagName("line").item(0).getTextContent().trim();
+                    Element partArea = (Element) partElement.getElementsByTagName("area").item(0);
+                    
+                    x = Integer.parseInt(partArea.getAttribute("x"));
+                    y = Integer.parseInt(partArea.getAttribute("y"));
+                    h = Integer.parseInt(partArea.getAttribute("h"));
+                    w = Integer.parseInt(partArea.getAttribute("w"));
+                    
+                    
+                    
                     roles.add(new Role(partName, level, line, x, y, w, h));
                 }
+                cards.add(new Card(name, img, budget, scene.number, scene.description, roles));
                 
-                cards.add(new Card(name, img, budget, x, y, h, w, scene.number, scene.description, roles));
-
             }
         } catch (Exception e) {
             e.printStackTrace();
